@@ -1,14 +1,5 @@
 # nlp-NLP Fine-Tuning Platform using Hugging Face & Custom Datasets
-This project is an interactive NLP model fine-tuning platform built using the Hugging Face ecosystem. It allows users to:
-->Select any pre-trained model from Hugging Face's model hub
-->Choose a dataset from Hugging Face or upload their own custom dataset
-->Fine-tune models by adjusting key hyperparameters
-->Evaluate and compare results to get the best performing model for specific NLP tasks like summarization
-Key Features
-->Custom Data Support: Upload your own dataset and preprocess it using the NLTK library (tokenization, stemming, lemmatization, stop word removal, named entity recognition, Word2Vec embedding, etc.).
-->Model Flexibility: Easily switch between different Hugging Face models for various NLP tasks.
-->Hyperparameter Tuning: Optimize performance by experimenting with different training parameters.
-->Problem Solving Focus: Addresses the issue of generic summarization models (e.g., trained only on DailyMail) struggling with conversational texts. This platform enables fine-tuning on domain-specific datasets like Samsung conversation data to improve accuracy.
+This project is an NLP-based fine-tuning platform that allows users to customize and improve pre-trained language models using the Hugging Face ecosystem. Users can choose any model and dataset available on Hugging Face or upload their own dataset. If a custom dataset is uploaded, the platform uses the NLTK library for preprocessing steps such as tokenization, stemming, lemmatization, stop word removal, named entity recognition, and Word2Vec vectorization. The main purpose of this platform is to allow flexible fine-tuning by modifying hyperparameters and evaluating the best model for a specific task, such as text summarization. One common problem with generic summarization models is that they often perform well only on specific datasets like CNN/DailyMail but struggle with other formats, such as conversational data. By allowing users to fine-tune models with their own datasets—such as dialogue datasets from Samsung—this project helps overcome such limitations and build more domain-specific, accurate NLP solutions.
 The main goal is to build a more adaptable and domain-specific NLP solution by empowering users to fine-tune models tailored to their specific needs, such as improving summarization performance on dialogues or informal communication.
 
 Technologies used (Python, NLTK, Transformers, etc.)
