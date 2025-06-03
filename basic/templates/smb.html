@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Training UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        select, input[type="file"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Train Your Model</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Select Model -->
+            <label for="model">Select Model:</label>
+            <select id="model" name="model">
+                <option name="a1" value="facebook/bart-large-cnn">facebook/bart-large-cnn</option>
+                <option name="a2" value="t5-small">t5-small</option>
+                <option name="a3" value="allenai/led-base-16384">allenai/led-base-16384</option>
+                <option name="a4" value="sshleifer/distilbart-cnn-12-6">sshleifer/distilbart-cnn-12-6</option>
+                <option name="a5" value="google/pegasus-cnn_dailymail">google/pegasus-cnn_dailymail</option>
+            </select>
+
+            <!-- Select Dataset Option -->
+            <label>Choose Dataset Option:</label>
+            <div>
+                <input type="radio" id="existing-dataset" name="dataset-option" value="existing">
+                <label for="existing-dataset">Existing Dataset</label>
+            </div>
+            <div>
+                <input type="radio" id="custom-dataset" name="dataset-option" value="custom">
+                <label for="custom-dataset">Custom Dataset</label>
+            </div>
+
+            <!-- Existing Dataset Selector -->
+            <div id="existing-dataset-selector" class="hidden">
+                <label for="dataset">Select Dataset:</label>
+                <select id="dataset" name="dataset">
+                    <option name="b1" value="xsum">xsum</option>
+                    <option name="b2" value="cnn_dailymail">cnn_dailymail</option>
+
+                    <option name="b5" value="samsum">samsum</option>
+                </select>
+            </div>
+
+            <!-- Custom Dataset File Uploader -->
+            <div id="custom-dataset-uploader" class="hidden">
+                <label for="custom-file">Upload Custom Dataset:</label>
+                <input name="custom-file" type="file" id="custom-file">
+            </div>
+
+            <!-- Start Training Button -->
+            <button name="submit" id="start-training">Start Training</button>
+        </form>
+
+        <!-- Display selected options after form submission -->
+        {% if model %}
+            <p>Selected Model: {{ model }}</p>
+        {% endif %}
+        {% if dataset_option %}
+            <p>Dataset Option: {{ dataset_option }}</p>
+        {% endif %}
+        {% if dataset %}
+            <p>Selected Dataset: {{ dataset }}</p>
+        {% endif %}
+        {% if custom_file %}
+            <p>Custom File: {{ custom_file.name }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        const existingDatasetRadio = document.getElementById('existing-dataset');
+        const customDatasetRadio = document.getElementById('custom-dataset');
+        const existingDatasetSelector = document.getElementById('existing-dataset-selector');
+        const customDatasetUploader = document.getElementById('custom-dataset-uploader');
+        const startTrainingButton = document.getElementById('start-training');
+
+        // Toggle visibility based on dataset option selection
+        existingDatasetRadio.addEventListener('change', () => {
+            existingDatasetSelector.classList.remove('hidden');
+            customDatasetUploader.classList.add('hidden');
+        });
+
+        customDatasetRadio.addEventListener('change', () => {
+            customDatasetUploader.classList.remove('hidden');
+            existingDatasetSelector.classList.add('hidden');
+        });
+
+        // Handle Start Training Button Click
+        startTrainingButton.addEventListener('click', () => {
+            const selectedModel = document.getElementById('model').value;
+            let datasetOption = document.querySelector('input[name="dataset-option"]:checked');
+
+            if (!datasetOption) {
+                alert('Please select a dataset option!');
+                return;
+            }
+
+            datasetOption = datasetOption.value;
+
+            if (datasetOption === 'existing') {
+                const selectedDataset = document.getElementById('dataset').value;
+                alert(`Training started with Model: ${selectedModel} and Dataset: ${selectedDataset}`);
+            } else if (datasetOption === 'custom') {
+                const fileInput = document.getElementById('custom-file');
+                if (fileInput.files.length === 0) {
+                    alert('Please upload a custom dataset file!');
+                    return;
+                }
+                alert(`Training started with Model: ${selectedModel} and Custom Dataset: ${fileInput.files[0].name}`);
+            }
+        });
+    </script>
+
+</body>
+</html>
